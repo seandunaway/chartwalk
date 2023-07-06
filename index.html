@@ -1,0 +1,125 @@
+<!doctype html>
+<head>
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+p {
+    color: gray;
+    position: absolute;
+    bottom: 1em;
+    right: 2em;
+}
+nav {
+    position: absolute;
+    top: 1em;
+    right: 2em;
+}
+input {
+    margin-right: 1em;
+    padding: 0.5em;
+}
+</style>
+</head>
+<canvas></canvas>
+<p></p>
+<nav>
+    <input id="delay" type="range" min="0" max="100" step="10" value="0">
+    <input id="enabled" type="button" value="stop">
+    <input id="reset" type="button" value="reset">
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module">
+
+let canvas = document.querySelector('canvas')
+let p = document.querySelector('p')
+
+let input_delay = document.getElementById('delay')
+let input_enabled = document.getElementById('enabled')
+let input_reset = document.getElementById('reset')
+
+let enabled = true
+let delay = 0
+let price = 0
+let i = 0
+
+let chart = new Chart(canvas, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [
+            {data: []},
+        ],
+    },
+    options: {
+        animation: false,
+        datasets: {
+            line: {
+                borderWidth: 1,
+                pointRadius: 0,
+                pointHitRadius: 0,
+            }
+        },
+        scales: {
+            x: {
+                display: false,
+                grid: {
+                    display: false,
+                },
+            },
+            y: {
+                grid: {
+                    display: false,
+                },
+                suggestedMin: -100,
+                suggestedMax: 100,
+            },
+        },
+        plugins: {
+            legend: {
+                display: false,
+            },
+            tooltip: {
+                enabled: false,
+            },
+        }
+    },
+})
+
+input_delay.addEventListener('change', function (event) {
+    delay = event.target.value
+})
+input_enabled.addEventListener('click', function (event) {
+    if (event.target.value === 'stop') {
+        enabled = false
+        event.target.value = 'start'
+    } else {
+        enabled = true
+        event.target.value = 'stop'
+    }
+})
+input_reset.addEventListener('click', function (event) {
+    chart.data.labels = []
+    chart.data.datasets[0].data = []
+    chart.update()
+    i = 0
+})
+
+while (true) {
+    await new Promise(resolve => setTimeout(resolve, delay))
+    if (! enabled) continue
+
+    let coinflip = Math.random() < 0.5
+    price += coinflip ? 1 : -1
+
+    chart.data.labels.push(i)
+    chart.data.datasets[0].data.push(price)
+    chart.update()
+
+    i++
+    p.textContent = i.toLocaleString()
+}
+
+</script>
