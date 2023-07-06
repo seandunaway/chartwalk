@@ -58,7 +58,9 @@ let chart = new Chart(canvas, {
     data: {
         labels: labels,
         datasets: [
-            {data: data},
+            {
+                data,
+            },
         ],
     },
     options: {
@@ -68,7 +70,7 @@ let chart = new Chart(canvas, {
                 borderWidth: 1,
                 pointRadius: 0,
                 pointHitRadius: 0,
-            }
+            },
         },
         scales: {
             x: {
@@ -92,7 +94,7 @@ let chart = new Chart(canvas, {
             tooltip: {
                 enabled: false,
             },
-        }
+        },
     },
 })
 
