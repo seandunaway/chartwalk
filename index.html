@@ -29,6 +29,7 @@ input {
     <input id="delay" type="range" min="0" max="100" step="10" value="0">
     <input id="enabled" type="button" value="stop">
     <input id="reset" type="button" value="reset">
+    <input id="splice" type="button" value="splice">
 </nav>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="module">
@@ -39,6 +40,7 @@ let p = document.querySelector('p')
 let input_delay = document.getElementById('delay')
 let input_enabled = document.getElementById('enabled')
 let input_reset = document.getElementById('reset')
+let input_splice = document.getElementById('splice')
 
 let enabled = true
 let delay = 0
@@ -103,8 +105,14 @@ input_enabled.addEventListener('click', function (event) {
 input_reset.addEventListener('click', function (event) {
     chart.data.labels = []
     chart.data.datasets[0].data = []
-    chart.update()
     i = 0
+    chart.update()
+})
+input_splice.addEventListener('click', function (event) {
+    chart.data.labels.splice(0, Math.trunc(chart.data.labels.length / 2))
+    chart.data.datasets[0].data.splice(0, Math.trunc(chart.data.datasets[0].data.length / 2))
+    i = chart.data.datasets[0].data.length
+    chart.update()
 })
 
 while (true) {
