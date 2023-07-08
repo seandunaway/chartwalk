@@ -106,6 +106,7 @@ input_max_items.addEventListener('change', function (event) {
 })
 input_delay.addEventListener('change', function (event) {
     delay = event.target.value
+    event.target.title = max_items
 })
 input_enabled.addEventListener('click', function (event) {
     if (event.target.value === 'stop') {
